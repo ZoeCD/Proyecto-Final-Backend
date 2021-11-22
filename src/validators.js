@@ -17,5 +17,21 @@ module.exports = {
         }
         return false;
     },
-
+    priceValidator: async (price) => {
+        try {
+            return parseFloat(price) > 0
+        } catch (e) {
+            return false
+        }
+        
+    },
+    doneValidator: async (done) => {
+        return done && typeof done == 'string' && (done == '1' || done == '0')
+    },
+    destinationValidator: async (destination) => {
+        return this.nameValidator(destination.name) &&
+               this.typeValidator(destination.type) &&
+               this.descriptionValidator(destination.description) && 
+               this.priceValidator(destination.price)
+    }
 }
