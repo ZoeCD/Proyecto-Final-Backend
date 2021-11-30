@@ -20,7 +20,6 @@ const DestinationSchema = mongoose.Schema({
         maxLength: [250, "Error 422: InvalidBodyException.\nDescription must be between 10 and 250 characters"],
         minLenght: [10, "Error 422: InvalidBodyException.\nDescription must be between 10 and 250 characters"],
     },
-    price: Number, 
     done: Boolean,
     owner: String,
 }, {collection:'destination'})

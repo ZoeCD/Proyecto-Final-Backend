@@ -9,6 +9,7 @@ module.exports = {
                     if (err) {
                         return res.status(422).json({ status: 422, message: data, error: err });
                     }
+                    console.log('added destination');
                     return res.status(200).json({ status: 200, items: data });
                 }
             )
@@ -22,14 +23,14 @@ module.exports = {
                     if (err) {
                         return res.status(422).json({ status: 422, message: data, error: err });
                     }
-                    if (data.owner != req.session.userid){ 
+                    if (data.owner != req.query.username || data.owner != req.body.username){ 
                         return res.status(403).json({ status: 403, error: 'not your data' });
                     }
                     return res.status(200).json({ status: 200, items: data });
                 }
             )
         } else {
-            Destination.find({owner: req.session.userid},
+            Destination.find({owner: req.query.username},
                 async (err, data) => {
                     if (err) {
                         return res.status(422).json({ status: 422, message: data, error: err });
@@ -47,7 +48,7 @@ module.exports = {
                 if (err) {
                     return res.status(422).json({ status: 422, message: data, error: err });
                 }
-                if (data.owner != req.session.userid){ 
+                if (data.owner != req.cookies.username){ 
                     return res.status(403).json({ status: 403, error: 'not your data' });
                 }
                 data.update(req.body, async (data, err) => {
@@ -66,6 +67,9 @@ module.exports = {
             async (data, err) => {
                 if (err) {
                     return res.status(422).json({ status: 422, message: data, error: err });
+                }
+                if (data.owner != req.cookies.username){ 
+                    return res.status(403).json({ status: 403, error: 'not your data' });
                 }
                 data.remove(async (data, err) => {
                     if (err) {

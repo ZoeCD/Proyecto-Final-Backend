@@ -1,21 +1,17 @@
-const { Router } = require("express");
+const router = require("express").Router();
 const {
-    callbackFunction,
-    logoutFunction
+    loginFunction,
 } = require("../src/auth.js");
 
 const requiresAuth = (req, res, next) => {
-    if (req.session.userid) {
+    if ((req.body && req.body.owner) || (req.query && req.query.username)) {
         return next();
     }
-    req.session.origin = req.headers.referer;
-    return res.redirect('/login');
+    console.log(req.body, req.query);
+    return res.status(401).json({ status: 401, error: "please log in" });
 }
 
-const router = Router();
-router.all('/', requiresAuth, (req, res) => res.json({ user: req.session.userid }));
-router.all('/callback', callbackFunction);
-router.all('/logout', logoutFunction);
+router.post('/login', loginFunction);
 
 
 module.exports = {
