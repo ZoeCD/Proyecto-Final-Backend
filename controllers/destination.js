@@ -44,14 +44,14 @@ module.exports = {
     put: async (req, res) => {
         Destination.findById(
             req.params.id || req.body.id,
-            async (data, err) => {
+            async (err, data) => {
                 if (err) {
-                    return res.status(422).json({ status: 422, message: data, error: err });
+                    return res.status(422).json({ status: 421, message: data, error: err });
                 }
-                if (data.owner != req.cookies.username){ 
+                if (data.owner != req.body.username){ 
                     return res.status(403).json({ status: 403, error: 'not your data' });
                 }
-                data.update(req.body, async (data, err) => {
+                data.updateOne(req.body, async (err, data) => {
                     if (err) {
                         return res.status(422).json({ status: 422, message: data, error: err });
                     }

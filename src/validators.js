@@ -16,7 +16,7 @@ idValidator = (id) => {
     return false;
 },
 doneValidator = (done) => {
-    return done && typeof done == 'string' && (done == '1' || done == '0')
+    return done && typeof done == 'boolean' && (done === true || done === false)
 },
 destinationValidator = (destination) => {
     const name = nameValidator(destination.name),
