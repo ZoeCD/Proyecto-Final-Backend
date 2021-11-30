@@ -5,7 +5,6 @@ const loginFunction = async (req, res) => {
     try {
         if (req.body.password && req.body.username) {
             req.body.password = createHmac('sha256', process.env.PW_SECRET).update(req.body.password).digest('hex')
-
         }
         User.findOne({ username: req.body.username },
             async (err, data) => {
@@ -13,7 +12,7 @@ const loginFunction = async (req, res) => {
                     return res.status(422).json({ status: 422, message: data, error: err });
                 }
                 console.log(data);
-                if (data.password) {
+                if (data && data.password) {
                     if (data.password == req.body.password) {
                         return res.status(200).json({ status: 200, message: "logged in" });
                     }
@@ -24,7 +23,7 @@ const loginFunction = async (req, res) => {
                     .then(
                         async (data, err) => {
                             if (err) {
-                                return res.status(422).json({ status: 422, message: data, error: err });
+                                return res.status(422).json({ status: 422, message: err });
                             }
                             console.log('created user');
                             return res.status(200).json({ status: 200, message: "signed up" });
